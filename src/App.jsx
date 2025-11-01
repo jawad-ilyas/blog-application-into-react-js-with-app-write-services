@@ -13,25 +13,24 @@ import PostCard from './Component/postCard/PostCard'
 import RTE from './Component/rte/RTE'
 const App = () => {
   // const navigator = useNavigate();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const dispatch = useDispatch();
   useEffect(() => {
-
+    console.log('====================================');
+    console.log("app is called ");
+    console.log('====================================');
     authService.getCurrentUser()
       .then((userData) => {
-        console.log("userData ", userData);
-
-        if (userData) {
-          dispatch(login({ userData }))
-        }
-        else {
-          dispatch(logout())
-
-        }
+        if (userData) dispatch(login({ userData }))
+        else dispatch(logout())
+      })
+      .catch((error) => {
+        console.log("User not logged in or token expired:", error.message);
+        dispatch(logout());
       })
       .finally(() => {
-        setLoading(false)
-      })
+        setLoading(false);
+      });
 
   }, [])
 

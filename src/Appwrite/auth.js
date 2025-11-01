@@ -15,6 +15,13 @@ class AuthService {
 
     async createAccount({ name, email, password }) {
         try {
+            // console.log('====================================');
+            // console.log("name", name);
+            // console.log("email", email);
+            // console.log("password", password);
+            // console.log("D.unique()", ID.unique());
+            // console.log('====================================');
+
 
             const userAccount = await this.account.create(ID.unique(), email, password, name)
 
@@ -33,6 +40,10 @@ class AuthService {
 
 
         } catch (error) {
+            console.log('====================================');
+            console.log("error into create account method into funation ", error);
+            console.log("error into create account method into funation ", error?.message);
+            console.log('====================================');
             throw error;
         }
     }
@@ -62,12 +73,27 @@ class AuthService {
             const result = await this.account.get();
             return result;
         } catch (error) {
+            console.log('====================================');
+            console.log("error into getCurrentUser function", error);
+            console.log("error into getCurrentUser function", error?.message);
+            console.log('====================================');
             throw error
+        }
+    }
+    async getCurrentSession() {
+        try {
+            const session = await this.account.getSession('current');
+            console.log('Current session details:', session);
+            return session;
+        } catch (error) {
+            console.log("Error fetching current session:", error.message);
+            throw error;
         }
     }
 
     async logout() {
         try {
+
             await this.account.deleteSession('current');
         } catch (error) {
             throw error;

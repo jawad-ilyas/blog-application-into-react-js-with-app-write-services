@@ -1,7 +1,8 @@
 import { logout } from "../../features/AuthSlice";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../../Appwrite/auth";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { LogoutBtn } from "../Index";
 
 
 
@@ -17,16 +18,12 @@ export default function Header() {
     const dispatch = useDispatch();
 
 
-    const handleLogOut = () => {
 
-        authService.logout()
-            .then(() => {
-                dispatch(logout())
-            })
-    }
 
     const { status: AuthStatus, userData } = useSelector(state => state.auth)
-
+    console.log('====================================');
+    console.log("auth status values is this ", AuthStatus);
+    console.log('====================================');
 
     const NavItems = [
         {
@@ -59,16 +56,6 @@ export default function Header() {
             slug: '/all-post',
             active: AuthStatus
         },
-        {
-            name: 'Sign Up',
-            slug: '/signup',
-            active: !AuthStatus
-        },
-        {
-            name: 'Login',
-            slug: '/login',
-            active: !AuthStatus
-        },
     ]
 
 
@@ -88,27 +75,21 @@ export default function Header() {
 
                 {/* === Navigation Links (Desktop) === */}
                 <nav className="hidden md:flex items-center gap-8 font-medium text-rose-800/80">
-                    {NavItems.map((items) => items.active ? (<NavLink to={items?.slug} className={({ isActive }) => `${isActive ? "text-green-200" : "text-pink-100"} hover:text-rose-600 transition`}>{items.name}</NavLink>
+                    {NavItems.map((items) => items.active ? (<NavLink key={items?.slug} to={items?.slug} className={({ isActive }) => `${isActive ? "text-green-200" : "text-pink-100"} hover:text-rose-600 transition`}>{items.name}</NavLink>
                     ) : null)}
-
                 </nav>
 
                 {/* === Right Side Actions === */}
-                {status ? <div className="hidden md:flex items-center gap-4">
-                    <button className="px-4 py-1.5 rounded-lg border border-rose-300/60 bg-white/50 text-rose-800 font-medium hover:bg-white hover:shadow transition">
+                {!AuthStatus ? <div className="hidden md:flex items-center gap-4">
+                    <Link to="/login" className="px-4 py-1.5 rounded-lg border border-rose-300/60 bg-white/50 text-rose-800 font-medium hover:bg-white hover:shadow transition">
                         Sign In
-                    </button>
-                    <button className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 text-white font-semibold shadow-md hover:opacity-90 transition">
+                    </Link>
+                    <Link to="/signup" className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 text-white font-semibold shadow-md hover:opacity-90 transition">
                         Get Started
-                    </button>
+                    </Link>
                 </div> :
-
-                    <div className="hidden md:flex items-center gap-4">
-                        <button onClick={handleLogOut} className="px-4 py-1.5 rounded-lg border border-rose-300/60 bg-white/50 text-rose-800 font-medium hover:bg-white hover:shadow transition">
-                            Log Out
-                        </button>
-
-                    </div>}
+                    <LogoutBtn />
+                }
 
                 {/* === Mobile Menu Icon === */}
                 <button className="md:hidden text-rose-800/80 focus:outline-none">

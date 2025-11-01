@@ -80,7 +80,6 @@ createRoot(document.getElementById('root')).render(
     {/* key s should be small */}
     <Provider store={Store}  >
       <RouterProvider router={router}>
-
         <App />
       </RouterProvider>
     </Provider>
